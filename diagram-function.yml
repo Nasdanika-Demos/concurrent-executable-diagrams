@@ -1,0 +1,7 @@
+diagram:
+  location: diagram.drawio
+  processor: processor
+  bind: bind
+  interfaces: java.util.function.Function
+  properties:
+    my-property: ${env.GREETING|Hola,}

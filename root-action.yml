@@ -1,25 +1,20 @@
 Action:
     icon: https://docs.nasdanika.org/images/nasdanika-logo.png
-    text: Nasdanika Templates
-    # location: https://github.com/Nasdanika-Demos - breaks the site in 2024.8.0, will be fixed in subsequent releases
+    text: Nasdanika Demos
+    location: https://github.com/Nasdanika-Demos
     children:
       - Action:
-          location: ${base-uri}search.html
-          icon: fas fa-search
-          text: Search
+          location: ${base-uri}index.html
+          text: Concurrent Executable Diagrams
           content:
             Interpolator:
               source:
-                exec.content.Resource: classpath://org/nasdanika/html/model/app/gen/search.html
-      - Action:
-          location: ${base-uri}glossary.html
-          text: Glossary
-          content:
-            Interpolator:
-              source:
-                exec.content.Resource: classpath://org/nasdanika/html/model/app/gen/semantic-info.html
+                Markdown:
+                  style: true
+                  source:
+                    exec.content.Resource: README.md
     navigation:
       - Action:
           text: Source
           icon: fab fa-github
-          location: https://github.com/Nasdanika-Templates/drawio-site  
+          location: https://github.com/Nasdanika-Demos/concurrent-executable-diagrams  
