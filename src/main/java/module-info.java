@@ -1,9 +1,9 @@
-module org.nasdanika.demos.diagrams.proxy {
+module org.nasdanika.demos.diagrams.concurrent {
 		
 	requires transitive org.nasdanika.drawio;
 	
-	exports org.nasdanika.demos.diagrams.proxy;
+	exports org.nasdanika.demos.diagrams.concurrent;
 	
-	opens org.nasdanika.demos.diagrams.proxy to org.nasdanika.common;
+	opens org.nasdanika.demos.diagrams.concurrent to org.nasdanika.common;
 	
 }
