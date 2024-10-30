@@ -64,7 +64,7 @@ public class BobProcessor {
 					null, 
 					request);
 			
-			Message carolResponse = carolEndpoint.invoke(toCarol);		
+			Message carolResponse = carolEndpoint.chat(toCarol);		
 			return new Message(
 					"Bob", 
 					"Alice", 
@@ -88,7 +88,6 @@ public class BobProcessor {
 	}
 	
 	@OutgoingEndpoint
-	public Invocable carolEndpoint;
+	public Chat carolEndpoint;
 	
-
 }

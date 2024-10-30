@@ -8,10 +8,8 @@ import java.util.function.Consumer;
 import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.demos.diagrams.concurrent.Chat.Message;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
-import org.nasdanika.graph.processor.HandlerWrapper;
 import org.nasdanika.graph.processor.IncomingHandler;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorConfig;
@@ -47,19 +45,36 @@ public class CarolProcessor {
 		System.out.println("I got constructed " + this);
 	}
 
-	@IncomingHandler(wrap = HandlerWrapper.INVOCABLE)
-	public Message chat(Message request) throws InterruptedException {
-		System.out.println("[Carol in " + Thread.currentThread().getName() + "] Got this from Bob: " + request);
-		Thread.sleep(200);
-		return new Message(
-				"Carol", 
-				"Bob", 
-				"Voce", 
-				"I'm fine, say Hi back!", 
-				Thread.currentThread().getName(), 
-				new Date(), 
-				request, 
-				null);		
-	}
+	@IncomingHandler	
+	public Chat chat = new Chat() {
+
+		@Override
+		public Message chat(Message request) {
+			System.out.println("[Carol in " + Thread.currentThread().getName() + "] Got this from Bob: " + request);
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				return new Message(
+						"Carol", 
+						"Bob", 
+						"Voce", 
+						"Got interrupted, sorry!", 
+						Thread.currentThread().getName(), 
+						new Date(), 
+						request, 
+						null);		
+			}
+			return new Message(
+					"Carol", 
+					"Bob", 
+					"Voce", 
+					"I'm fine, say Hi back!", 
+					Thread.currentThread().getName(), 
+					new Date(), 
+					request, 
+					null);		
+		}
+		
+	};
 
 }

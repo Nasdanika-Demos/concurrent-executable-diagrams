@@ -30,12 +30,12 @@ public class TestDiagramExecution {
 	 * @throws Exception
 	 */
 	@Test
-	public void testEndpoint() throws Exception {
+	public void testAsyncInvocableEndpoint() throws Exception {
 		Document document = loadDocument();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
 		
 		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(
-				document.getPages().stream().filter(p -> "Endpoint".equals(p.getName())).findFirst().get(), 
+				document.getPages().stream().filter(p -> "AsyncInvocableEndpoint".equals(p.getName())).findFirst().get(), 
 				"processor");
 		
 		ExecutorService threadPool = Executors.newFixedThreadPool(5);
