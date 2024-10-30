@@ -1,7 +1,6 @@
 package org.nasdanika.demos.diagrams.concurrent;
 
 import java.util.Date;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -12,15 +11,17 @@ import org.nasdanika.common.ProgressMonitor;
 import org.nasdanika.demos.diagrams.concurrent.Chat.Message;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
+import org.nasdanika.graph.processor.HandlerWrapper;
+import org.nasdanika.graph.processor.IncomingHandler;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
 import org.nasdanika.graph.processor.OutgoingEndpoint;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 
 /**
- * This processor's is invoked from a dynamic proxy apply(). 
+ * This processor's is activated via hanler methods. 
  */
-public class AliceProcessor implements Invocable {
+public class BobProcessor {
 
 	/**
 	 * This is the constructor signature for graph processor classes which are to e instantiated by URIInvocableCapabilityFactory (org.nasdanika.capability.factories.URIInvocableCapabilityFactory).
@@ -34,7 +35,7 @@ public class AliceProcessor implements Invocable {
 	 * @param endpointWiringStageConsumer
 	 * @param wiringProgressMonitor
 	 */
-	public AliceProcessor(
+	public BobProcessor(
 			Loader loader,
 			ProgressMonitor loaderProgressMonitor,
 			Object data,
@@ -47,44 +48,47 @@ public class AliceProcessor implements Invocable {
 		System.out.println("I got constructed " + this);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public String invoke(Object... args) {
-		Message m1 = new Message(
-				"Alice", 
+	@IncomingHandler(wrap = HandlerWrapper.ASYNC_INVOCABLE)
+	public Message chat(Message request) throws InterruptedException {
+		System.out.println("[Bob in " + Thread.currentThread().getName() + "] Got this from Alice: " + request);
+		Thread.sleep(200);
+		
+		if (request.text().contains("Carol")) {
+			Message toCarol = new Message(
+					"Bob", 
+					"Carol", 
+					"Voice", 
+					"Hey Carol, Alice says Hi and asks how you are!", 
+					Thread.currentThread().getName(), 
+					new Date(), 
+					null, 
+					request);
+			
+			Message carolResponse = carolEndpoint.invoke(toCarol);		
+			return new Message(
+					"Bob", 
+					"Alice", 
+					"SMS", 
+					"She is fine, says Hi back!", 
+					Thread.currentThread().getName(), 
+					new Date(), 
+					request, 
+					carolResponse);					
+		}
+		
+		return new Message(
 				"Bob", 
+				"Alice", 
 				"SMS", 
-				"Hi, Bob! How are you?", 
+				"I'm fine", 
 				Thread.currentThread().getName(), 
 				new Date(), 
-				null, 
-				null);
-		
-		CompletableFuture<Message> responseCF1 = bobEndpoint.invoke(m1);		
-		responseCF1.thenAccept(response -> {
-			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
-		});
-		
-		Message m2 = new Message(
-				"Alice", 
-				"Bob", 
-				"SMS", 
-				"By the way, say Hi to Carol! How is she doing?", 
-				Thread.currentThread().getName(), 
-				new Date(), 
-				null, 
-				null);
-		
-		
-		CompletableFuture<Message> responseCF2 = bobEndpoint.invoke(m2);		
-		responseCF2.thenAccept(response -> {
-			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
-		});
-		
-		return "Here I'm";
+				request, 
+				null);		
 	}
 	
 	@OutgoingEndpoint
-	public Invocable bobEndpoint;
+	public Invocable carolEndpoint;
+	
 
 }
