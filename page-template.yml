@@ -33,7 +33,7 @@ bootstrap.Page:
       </script>    
   body:
     app.Page:
-      fluid: false
+      fluid: true
       navigation-panel:
         style: SEARCHABLE_TREE # COLLAPSIBLE_CARDS
         collapsible: true

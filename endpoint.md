@@ -48,7 +48,7 @@ The type of the endpoint is ``AsyncChat``, which is a functional interface.
 The wiring process detects that the endpoint type is not compatible with ``Inovocable`` and is a functional interface and creates a proxy.
 
 The endpoint type could have been ``Invocable`` as shown in the commented out line - it would spare us from creating ``AsynChat`` interface. 
-However, ``AsyncChat`` interface introduces strong typing and makes AliceProcessor code more robust.
+However, ``AsyncChat`` interface introduces strong typing and makes ``AliceProcessor`` code more robust.
 
 ```java
 public class AliceProcessor implements Invocable {
