@@ -35,7 +35,7 @@ public class TestDiagramExecution {
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
 		
 		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(
-				document.getPages().stream().filter(p -> "AsyncInvocableEndpoint".equals(p.getName())).findFirst().get(), 
+				document.getPages().stream().filter(p -> "AsyncInvocableEndpointFactory".equals(p.getName())).findFirst().get(), 
 				"processor");
 		
 		ExecutorService threadPool = Executors.newFixedThreadPool(5);

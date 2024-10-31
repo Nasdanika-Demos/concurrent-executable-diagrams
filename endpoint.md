@@ -43,8 +43,12 @@ Alice processor sends messages to Bob processor and Bob processor communicates w
 Alice node has ``bind`` property set to ``apply``, which binds its processor, which implements ``Invocable`` to the invocation of the dynamic proxy's ``apply()`` method.
 Alice node ``processor`` property is set to ``data:java/org.nasdanika.demos.diagrams.concurrent.AliceProcessor``.
 
-
 Alice processor communicates with Bob processor via ``bobEndpoint`` which is wired to perform asynchronous invocation of Bob processor ``chat()`` method.
+The type of the endpoint is ``AsyncChat``, which is a functional interface. 
+The wiring process detects that the endpoint type is not compatible with ``Inovocable`` and is a functional interface and creates a proxy.
+
+The endpoint type could have been ``Invocable`` as shown in the commented out line - it would spare us from creating ``AsynChat`` interface. 
+However, ``AsyncChat`` interface introduces strong typing and makes AliceProcessor code more robust.
 
 ```java
 public class AliceProcessor implements Invocable {
@@ -75,7 +79,7 @@ public class AliceProcessor implements Invocable {
 				null, 
 				null);
 		
-		CompletableFuture<Message> responseCF1 = bobEndpoint.invoke(m1);		
+		CompletableFuture<Message> responseCF1 = bobEndpoint.chat(m1);		
 		responseCF1.thenAccept(response -> {
 			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
 		});
@@ -91,7 +95,7 @@ public class AliceProcessor implements Invocable {
 				null);
 		
 		
-		CompletableFuture<Message> responseCF2 = bobEndpoint.invoke(m2);		
+		CompletableFuture<Message> responseCF2 = bobEndpoint.chat(m2);		
 		responseCF2.thenAccept(response -> {
 			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
 		});
@@ -100,7 +104,8 @@ public class AliceProcessor implements Invocable {
 	}
 	
 	@OutgoingEndpoint
-	public Invocable bobEndpoint;
+	public AsyncChat bobEndpoint;
+	//public Invocable bobEndpoint;
 
 }
 ```

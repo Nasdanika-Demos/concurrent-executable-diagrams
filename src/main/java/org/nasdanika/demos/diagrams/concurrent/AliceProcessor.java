@@ -9,7 +9,6 @@ import java.util.function.Consumer;
 import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.demos.diagrams.concurrent.Chat.Message;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.NodeProcessorConfig;
@@ -60,7 +59,7 @@ public class AliceProcessor implements Invocable {
 				null, 
 				null);
 		
-		CompletableFuture<Message> responseCF1 = bobEndpoint.invoke(m1);		
+		CompletableFuture<Message> responseCF1 = bobEndpoint.chat(m1);		
 		responseCF1.thenAccept(response -> {
 			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
 		});
@@ -76,7 +75,7 @@ public class AliceProcessor implements Invocable {
 				null);
 		
 		
-		CompletableFuture<Message> responseCF2 = bobEndpoint.invoke(m2);		
+		CompletableFuture<Message> responseCF2 = bobEndpoint.chat(m2);		
 		responseCF2.thenAccept(response -> {
 			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
 		});
@@ -85,6 +84,6 @@ public class AliceProcessor implements Invocable {
 	}
 	
 	@OutgoingEndpoint
-	public Invocable bobEndpoint;
+	public AsyncChat bobEndpoint;
 
 }

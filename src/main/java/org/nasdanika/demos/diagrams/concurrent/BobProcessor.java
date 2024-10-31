@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.demos.diagrams.concurrent.Chat.Message;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.ConnectionProcessorConfig;
 import org.nasdanika.graph.processor.HandlerWrapper;
