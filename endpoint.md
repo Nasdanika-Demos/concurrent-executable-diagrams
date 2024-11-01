@@ -10,20 +10,18 @@ Document document = loadDocument();
 ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
 		
 ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(
-		document.getPages().stream().filter(p -> "Endpoint".equals(p.getName())).findFirst().get(), 
+		document.getPages().stream().filter(p -> "AsyncInvocableEndpointFactory".equals(p.getName())).findFirst().get(), 
 		"processor");
 		
-ExecutorService threadPool = Executors.newFixedThreadPool(5);		
+ExecutorService threadPool = Executors.newFixedThreadPool(5);
+		
 AsyncInvocableEndpointFactory endpointFactory = new AsyncInvocableEndpointFactory(threadPool);		
 		
 java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
 		"bind",
 		endpointFactory,
 		null,
-		info -> {
-			System.out.println("Info: " + info);
-			return info.getProcessor();
-		},
+		null,
 		progressMonitor,
 		java.util.function.Function.class);
 		
@@ -93,14 +91,9 @@ public class AliceProcessor implements Invocable {
 				new Date(), 
 				null, 
 				null);
-		
-		
-		CompletableFuture<Message> responseCF2 = bobEndpoint.chat(m2);		
-		responseCF2.thenAccept(response -> {
-			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
-		});
-		
-		return "Here I'm";
+				
+		CompletableFuture<Message> responseCF2 = bobEndpoint.chat(m2);				
+		return responseCF2.join().toString();
 	}
 	
 	@OutgoingEndpoint

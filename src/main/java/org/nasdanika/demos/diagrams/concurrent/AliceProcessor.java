@@ -75,12 +75,8 @@ public class AliceProcessor implements Invocable {
 				null);
 		
 		
-		CompletableFuture<Message> responseCF2 = bobEndpoint.chat(m2);		
-		responseCF2.thenAccept(response -> {
-			System.out.println("[" + Thread.currentThread().getName() + "] Response: " + response);			
-		});
-		
-		return "Here I'm";
+		CompletableFuture<Message> responseCF2 = bobEndpoint.chat(m2);				
+		return responseCF2.join().toString();
 	}
 	
 	@OutgoingEndpoint
