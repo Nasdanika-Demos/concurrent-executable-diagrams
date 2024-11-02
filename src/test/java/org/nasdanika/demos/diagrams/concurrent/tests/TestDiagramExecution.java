@@ -76,6 +76,9 @@ public class TestDiagramExecution {
 		Map<org.nasdanika.graph.Element,AutoCloseable> toClose = new HashMap<>();
 		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(page, "processor") {
 
+			/**
+			 * This override is needed to collect processors implementing {@link AutoCloseable}
+			 */
 			@Override
 			protected Object doCreateProcessor(
 					ProcessorConfig config, 
@@ -114,6 +117,63 @@ public class TestDiagramExecution {
 			}
 		});
 	}
+		
+	/**
+	 * Tests concurrent execution with {@link AsyncInvocableConnectionProcessor} 
+	 * @throws Exception
+	 */
+	@Test
+	public void testThreadPoolContainer() throws Exception {
+		Document document = loadDocument();
+		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
+		
+		Page page = document.getPages().stream().filter(p -> "Thread pool container".equals(p.getName())).findFirst().get();
+
+		Map<org.nasdanika.graph.Element,AutoCloseable> toClose = new HashMap<>();
+		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(page, "processor") {
+
+			/**
+			 * This override is needed to collect processors implementing {@link AutoCloseable}
+			 */
+			@Override
+			protected Object doCreateProcessor(
+					ProcessorConfig config, 
+					boolean parallel,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object>, ProgressMonitor>> infoProvider,
+					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
+					ProgressMonitor progressMonitor) {
+				
+				Object processor = super.doCreateProcessor(config, parallel, infoProvider, endpointWiringStageConsumer, progressMonitor);
+				if (processor instanceof AutoCloseable) {
+					toClose.put(config.getElement(), (AutoCloseable) processor);
+				}
+				return processor;
+			}
+			
+		};
+		
+		java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
+				"bind",
+				null,
+				progressMonitor,
+				java.util.function.Function.class);
+		
+		System.out.println("Result: " + proxy.apply(33));		
+		
+		// Closing children first
+		System.out.println("Closing");
+		page.accept(e -> {
+			AutoCloseable tc = toClose.get(e);
+			if (tc != null) {
+				try {
+					tc.close();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+	}
+	
 	
 	@Test
 	public void testTraversal() throws Exception {
