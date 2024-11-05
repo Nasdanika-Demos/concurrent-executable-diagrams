@@ -67,7 +67,7 @@ public class CarolProcessor {
 			return new Message(
 					"Carol", 
 					"Bob", 
-					"Voce", 
+					"Voice", 
 					"I'm fine, say Hi back!", 
 					Thread.currentThread().getName(), 
 					new Date(), 
