@@ -172,8 +172,7 @@ public class TestDiagramExecution {
 				}
 			}
 		});
-	}
-	
+	}	
 	
 	@Test
 	public void testTraversal() throws Exception {
