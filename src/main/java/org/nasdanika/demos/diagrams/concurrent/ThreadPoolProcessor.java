@@ -41,8 +41,7 @@ public class ThreadPoolProcessor implements AutoCloseable, Supplier<Executor> {
 			this.executor = Executors.newFixedThreadPool(Integer.parseInt(fragment));
 			this.terminationTimeout = 1;
 			this.terminationTimeoutUnit = TimeUnit.MINUTES;
-			shutdownExecutor = true;
-			
+			shutdownExecutor = true;			
 		}
 	}	
 

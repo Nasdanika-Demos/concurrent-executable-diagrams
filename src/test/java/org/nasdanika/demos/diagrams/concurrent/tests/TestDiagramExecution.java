@@ -46,7 +46,6 @@ public class TestDiagramExecution {
 				"processor");
 		
 		ExecutorService threadPool = Executors.newFixedThreadPool(5);
-		
 		AsyncInvocableEndpointFactory endpointFactory = new AsyncInvocableEndpointFactory(threadPool);		
 		
 		java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
