@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.demos</groupId>
-	<version>2025.1.0</version>
+	<version>2025.2.0</version>
 	<artifactId>concurrent-executable-diagrams</artifactId>
 	<packaging>jar</packaging>
 	<name>Concurrent Executable Diagrams</name>
 	<description>Demos of concurrent execution of diagrams</description>
 	<properties>
-		<core.version>2025.1.0</core.version>
+		<core.version>2025.2.0</core.version>
 	</properties>	
 
 	<build>
