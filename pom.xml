@@ -2,13 +2,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.nasdanika.demos</groupId>
-	<version>2025.2.0</version>
+	<version>2025.3.0</version>
 	<artifactId>concurrent-executable-diagrams</artifactId>
 	<packaging>jar</packaging>
 	<name>Concurrent Executable Diagrams</name>
 	<description>Demos of concurrent execution of diagrams</description>
 	<properties>
-		<core.version>2025.2.0</core.version>
+		<core.version>2025.3.0</core.version>
 	</properties>	
 
 	<build>
@@ -16,7 +16,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.13.0</version>
+				<version>3.14.0</version>
 				<configuration>
 					<source>17</source>
 					<target>17</target>
@@ -68,7 +68,7 @@
 		<dependency>
 		    <groupId>org.apache.groovy</groupId>
 		    <artifactId>groovy-all</artifactId>
-		    <version>4.0.24</version>
+		    <version>4.0.26</version>
 		    <type>pom</type>
 		</dependency>
 	
