@@ -194,10 +194,10 @@ public class TestDiagramExecution {
 	protected Document loadDocument() throws IOException, ParserConfigurationException, SAXException {
 		Function<URI, InputStream> uriHandler = null;				
 		Function<String, String> propertySource = Map.of("my-property", "Hello")::get;		
-		Document document = Document.load(
-				new File("diagram.drawio"),
-				uriHandler,
-				propertySource);
+		Document.Context docContext = Document.Context.from(
+			Document.Context.fromURIHandler(uriHandler),
+			Document.Context.fromPropertySource(propertySource));
+		Document document = Document.load(new File("diagram.drawio"), docContext);
 		return document;
 	}	
 		
