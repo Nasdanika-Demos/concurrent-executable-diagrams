@@ -61,7 +61,6 @@
 		    <groupId>org.apache.groovy</groupId>
 		    <artifactId>groovy-jsr223</artifactId>
 		    <version>5.0.3</version>
-		    <type>pom</type>
 		</dependency>
 	
 		<dependency>
