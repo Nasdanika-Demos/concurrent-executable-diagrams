@@ -26,6 +26,7 @@ import org.nasdanika.drawio.Page;
 import org.nasdanika.drawio.processor.ElementInvocableFactory;
 import org.nasdanika.graph.processor.AsyncInvocableConnectionProcessor;
 import org.nasdanika.graph.processor.AsyncInvocableEndpointFactory;
+import org.nasdanika.graph.processor.EndpointFactory;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
 import org.xml.sax.SAXException;
@@ -41,7 +42,7 @@ public class TestDiagramExecution {
 		Document document = loadDocument();
 		ProgressMonitor progressMonitor = new PrintStreamProgressMonitor();				
 		
-		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(
+		ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<Object,Object,Object>(
 				document.getPages().stream().filter(p -> "AsyncInvocableEndpointFactory".equals(p.getName())).findFirst().get(), 
 				"processor");
 		
@@ -73,16 +74,16 @@ public class TestDiagramExecution {
 		Page page = document.getPages().stream().filter(p -> "AsyncInvocableConnectionProcessor".equals(p.getName())).findFirst().get();
 
 		Map<org.nasdanika.graph.Element,AutoCloseable> toClose = new HashMap<>();
-		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(page, "processor") {
-
+		ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<Object,Object,Object>(page, "processor") {
+			
 			/**
 			 * This override is needed to collect processors implementing {@link AutoCloseable}
 			 */
 			@Override
 			protected Object doCreateProcessor(
-					ProcessorConfig config, 
+					ProcessorConfig<Object,Object,Object> config, 
 					boolean parallel,
-					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object>, ProgressMonitor>> infoProvider,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object,Object, Object, Object>, ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
@@ -97,6 +98,7 @@ public class TestDiagramExecution {
 		
 		java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
 				"bind",
+				EndpointFactory.nopEndpointFactory(),
 				null,
 				progressMonitor,
 				java.util.function.Function.class);
@@ -129,16 +131,16 @@ public class TestDiagramExecution {
 		Page page = document.getPages().stream().filter(p -> "Thread pool container".equals(p.getName())).findFirst().get();
 
 		Map<org.nasdanika.graph.Element,AutoCloseable> toClose = new HashMap<>();
-		ElementInvocableFactory elementInvocableFactory = new ElementInvocableFactory(page, "processor") {
+		ElementInvocableFactory<Object,Object,Object> elementInvocableFactory = new ElementInvocableFactory<Object,Object,Object>(page, "processor") {
 
 			/**
 			 * This override is needed to collect processors implementing {@link AutoCloseable}
 			 */
 			@Override
 			protected Object doCreateProcessor(
-					ProcessorConfig config, 
+					ProcessorConfig<Object,Object,Object> config, 
 					boolean parallel,
-					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object>, ProgressMonitor>> infoProvider,
+					BiConsumer<org.nasdanika.graph.Element, BiConsumer<ProcessorInfo<Object,Object, Object, Object>, ProgressMonitor>> infoProvider,
 					Consumer<CompletionStage<?>> endpointWiringStageConsumer, 
 					ProgressMonitor progressMonitor) {
 				
@@ -153,6 +155,7 @@ public class TestDiagramExecution {
 		
 		java.util.function.Function<Object,Object> proxy = elementInvocableFactory.createProxy(
 				"bind",
+				EndpointFactory.nopEndpointFactory(),
 				null,
 				progressMonitor,
 				java.util.function.Function.class);
@@ -186,8 +189,8 @@ public class TestDiagramExecution {
 			.get();
 				
 		System.out.println(bobNode);
-		Consumer<Element> collector = System.out::println;
-		Consumer<Element> traverser = org.nasdanika.drawio.Util.traverser(collector, null);
+		Consumer<Element<?>> collector = System.out::println;
+		Consumer<Element<?>> traverser = org.nasdanika.drawio.Util.traverser(collector, null);
 		bobNode.accept(traverser, null);
 	}
 

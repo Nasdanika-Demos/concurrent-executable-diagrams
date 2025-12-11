@@ -9,23 +9,21 @@ import java.util.function.Supplier;
 import org.nasdanika.capability.CapabilityFactory.Loader;
 import org.nasdanika.common.Invocable;
 import org.nasdanika.common.ProgressMonitor;
-import org.nasdanika.drawio.Connection;
 import org.nasdanika.graph.Element;
 import org.nasdanika.graph.processor.AsyncInvocableConnectionProcessor;
 import org.nasdanika.graph.processor.ParentProcessor;
 import org.nasdanika.graph.processor.ProcessorConfig;
 import org.nasdanika.graph.processor.ProcessorInfo;
-import org.nasdanika.graph.processor.RegistryEntry;
 
-public class ConcurrentConnectionProcessor extends AsyncInvocableConnectionProcessor {
+public class ConcurrentConnectionProcessor extends AsyncInvocableConnectionProcessor<Object,Object,Object> {
 
 	public ConcurrentConnectionProcessor(
 			Loader loader, 
 			ProgressMonitor loaderProgressMonitor, 
 			Object data,
 			String fragment, 
-			ProcessorConfig config,
-			BiConsumer<Element, BiConsumer<ProcessorInfo<Invocable>, ProgressMonitor>> infoProvider,
+			ProcessorConfig<Object,Object,Object> config,
+			BiConsumer<Element, BiConsumer<ProcessorInfo<Object,Object,Object,Invocable>, ProgressMonitor>> infoProvider,
 			Consumer<CompletionStage<?>> endpointWiringStageConsumer, ProgressMonitor wiringProgressMonitor) {
 		super(
 				loader, 
